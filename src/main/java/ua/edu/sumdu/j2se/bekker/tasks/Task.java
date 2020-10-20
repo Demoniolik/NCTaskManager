@@ -1,5 +1,14 @@
 package ua.edu.sumdu.j2se.bekker.tasks;
 
+/**
+ * This is the class which hold all the information needed to handle the task in the program
+ * This class coluld be described as one that hold all the needed information to schedule a task
+ * The task colud be of two types -
+ *      - one is that will not be repeated. It will be scheduled on one date and that's it
+ *      - second one is that will be repeated from start point of time to the end point with some interval
+ *
+ * @author Bekker Dmitry
+ * */
 
 public class Task {
 
@@ -10,10 +19,26 @@ public class Task {
     private int interval;
     private boolean active;
 
+    /**
+     * This is constructor which will creates non-repeated task
+     *
+     * @param title - is the name of the task, that we want to schedule
+     * @param time - specified time of the task to occur
+     */
+
     public Task(String title, int time) {
         this.title = title;
         this.time = time;
     }
+
+    /**
+     * This is the constructor which creates repeated task
+     *
+     * @param title - is the name of the task, that we want to schedule
+     * @param start - start time of the task
+     * @param end - the deadline of the task
+     * @param interval - amount of times the task will be repeated during the time form start point to the end
+     */
 
     public Task(String title, int start, int end, int interval) {
         this.title = title;
@@ -46,6 +71,12 @@ public class Task {
 
         return this.time;
     }
+
+    /**
+     * This method sets time for the task
+     * in case it was a repeatable task it becomes non-repeatable
+     * and it sets time for non-repeatable task
+     */
 
     public void setTime(int time) {
 
@@ -85,6 +116,12 @@ public class Task {
         return 0;
     }
 
+    /**
+     * This method sets time for the task
+     * in case it was a non-repeatable task it becomes repeatable
+     * and it sets time for repeatable task
+     */
+
     public void setTime(int start, int end, int interval) {
 
         if (!isRepeated()) {
@@ -101,6 +138,18 @@ public class Task {
         return time == 0;
     }
 
+    /**
+     * This method looks for the task that will occur before the current (given) time
+     * if task has already happened (given time is after the time of the the task to occur)
+     *  it will return -1
+     *  For non-repeatable tasks it checks if the given time is before the time of the task to take place
+     *  For repeatable tasks it checks if the given time is before the start time plus it adds the interval in case
+     *  if given time is in interval of the task. We also should return the start point including the interval it is taking place
+     *
+     * @param current - time that is given to check when the task is scheduled in case the given time is before the task time
+     * @return the time of the task in case the given time is before the task time
+     * */
+
     public int nextTimeAfter(int current) {
 
         if (isActive()) {
@@ -108,7 +157,6 @@ public class Task {
             if (!isRepeated()) {
 
                 if (this.time > current) {
-
                     return this.time;
                 }else return -1;
             }
