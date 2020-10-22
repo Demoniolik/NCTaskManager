@@ -64,11 +64,9 @@ public class Task {
     }
 
     public int getTime() {
-
         if (isRepeated()) {
             return this.start;
         }
-
         return this.time;
     }
 
@@ -79,32 +77,25 @@ public class Task {
      */
 
     public void setTime(int time) {
-
         if (isRepeated()) {
             this.start = 0;
             this.end = 0;
             this.interval = 0;
         }
-
         this.time = time;
     }
 
     public int getStartTime() {
-
         if (isRepeated()) {
             return this.start;
         }
-
         return this.time;
-
     }
 
     public int getEndTime() {
-
         if (isRepeated()) {
             return this.end;
         }
-
         return this.time;
     }
 
@@ -112,7 +103,6 @@ public class Task {
         if (isRepeated()) {
             return this.interval;
         }
-
         return 0;
     }
 
@@ -123,15 +113,12 @@ public class Task {
      */
 
     public void setTime(int start, int end, int interval) {
-
         if (!isRepeated()) {
             this.time = 0;
         }
-
         this.start = start;
         this.end = end;
         this.interval = interval;
-
     }
 
     public boolean isRepeated() {
@@ -151,26 +138,18 @@ public class Task {
      * */
 
     public int nextTimeAfter(int current) {
-
         if (isActive()) {
-
             if (!isRepeated()) {
-
                 if (this.time > current) {
                     return this.time;
                 }else return -1;
             }
-
             for (int startPoint = this.start; startPoint < this.end; startPoint += interval) {
-
                 if (current < startPoint) {
-
                     return startPoint;
                 }
             }
         }
-
         return -1;
-
     }
 }

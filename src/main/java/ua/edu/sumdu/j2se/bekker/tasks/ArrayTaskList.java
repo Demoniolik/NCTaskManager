@@ -48,14 +48,19 @@ public class ArrayTaskList implements Iterable<Task>{
 
     private void trim() {
 
+        if (this.size() <= (double)capacity * 0.4) {
+
+            this.capacity *= 0.4;
+            this.taskList = copy();
+
+        }
+
     }
 
     private Task[] copy() {
         Task[] newTaskList = new Task[this.capacity];
 
-        for (int i = 0; i < this.size(); ++i) {
-            newTaskList[i] = taskList[i];
-        }
+        if (this.size() >= 0) System.arraycopy(taskList, 0, newTaskList, 0, this.size());
 
         return newTaskList;
 
@@ -65,7 +70,7 @@ public class ArrayTaskList implements Iterable<Task>{
     public boolean remove(Task task) {
 
         for (int i = 0; i < this.size(); ++i) {
-
+            trim();
             if (taskList[i].equals(task)) {
                 moveToTheLeft(i);
                 this.size--;
@@ -80,9 +85,8 @@ public class ArrayTaskList implements Iterable<Task>{
 
     private void moveToTheLeft(int index) {
 
-        for (int i = index; i < this.size() - 1; ++i) {
-            this.taskList[i] = this.taskList[i+1];
-        }
+        if (this.size() - 1 - index >= 0)
+            System.arraycopy(this.taskList, index + 1, this.taskList, index, this.size() - 1 - index);
 
     }
 
