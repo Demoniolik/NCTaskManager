@@ -23,8 +23,15 @@ public class Task {
      * @param title - is the name of the task, that we want to schedule
      * @param time - specified time of the task to occur
      */
-    public Task(String title, int time) {
+    public Task(String title, int time) throws IllegalArgumentException {
+
+        if (title == null) {
+            throw new IllegalArgumentException("Title of the task cannot be null");
+        }
         this.title = title;
+        if(time < 0) {
+            throw new IllegalArgumentException("Time cannot be less than zero");
+        }
         this.time = time;
     }
 
@@ -36,10 +43,24 @@ public class Task {
      * @param end - the deadline of the task
      * @param interval - amount of times the task will be repeated during the time form start point to the end
      */
-    public Task(String title, int start, int end, int interval) {
+    public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
+        if (title == null) {
+            throw new IllegalArgumentException("Title of the task cannot be null");
+        }
         this.title = title;
+        if (start < 0) {
+            throw new IllegalArgumentException("Start point cannot be less than zero");
+        }
         this.start = start;
+        if (end < 0) {
+            throw new IllegalArgumentException("End point cannot be less than zero");
+        }else if (start >= end) {
+            throw new IllegalArgumentException("End point cannot be less or equal to start point");
+        }
         this.end = end;
+        if (interval < 0) {
+            throw new IllegalArgumentException("Interval cannot be less than zero");
+        }
         this.interval = interval;
     }
 
@@ -47,7 +68,10 @@ public class Task {
         return this.title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title) throws IllegalArgumentException {
+        if (title == null) {
+            throw new IllegalArgumentException("Title of the task cannot be null");
+        }
         this.title = title;
     }
 
@@ -71,7 +95,10 @@ public class Task {
      * in case it was a repeatable task it becomes non-repeatable
      * and it sets time for non-repeatable task
      */
-    public void setTime(int time) {
+    public void setTime(int time) throws IllegalArgumentException {
+        if (time < 0) {
+            throw new IllegalArgumentException("Time cannot be less than zero");
+        }
         if (isRepeated()) {
             this.start = 0;
             this.end = 0;
@@ -106,7 +133,18 @@ public class Task {
      * in case it was a non-repeatable task it becomes repeatable
      * and it sets time for repeatable task
      */
-    public void setTime(int start, int end, int interval) {
+    public void setTime(int start, int end, int interval) throws IllegalArgumentException {
+        if (start < 0) {
+            throw new IllegalArgumentException("Start point cannot be less than zero");
+        }
+        if (end < 0) {
+            throw new IllegalArgumentException("End point cannot be less than zero");
+        }else if (start >= end) {
+            throw new IllegalArgumentException("End point cannot be less or equal to start point");
+        }
+        if (interval < 0) {
+            throw new IllegalArgumentException("Interval cannot be less than zero");
+        }
         if (!isRepeated()) {
             this.time = 0;
         }
