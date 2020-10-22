@@ -4,8 +4,6 @@ import java.util.Iterator;
 
 public class ArrayTaskList implements Iterable<Task>{
 
-    // TODO: Create method to trim your array
-
     private Task[] taskList;
     private int capacity;
     private int size;
@@ -40,11 +38,9 @@ public class ArrayTaskList implements Iterable<Task>{
     private void grow() {
 
         this.capacity *= 1.5; // Here grow our capacity to make bigger array
-        this.taskList = copy(); // Here we copy old values from initial array to the new one and assign it to the same refernce
+        this.taskList = copy(); // Here we copy old values from initial array to the new one and assign it to the same reference
 
     }
-
-    // TODO: Implement the shrinking of the array in case that the 60% of capacity will not be used
 
     private void trim() {
 
@@ -65,7 +61,6 @@ public class ArrayTaskList implements Iterable<Task>{
         return newTaskList;
 
     }
-
 
     public boolean remove(Task task) {
 
@@ -105,9 +100,7 @@ public class ArrayTaskList implements Iterable<Task>{
     }
 
     public ArrayTaskList incoming(int from, int to) {
-
         ArrayTaskList subTaskList = new ArrayTaskList();
-
         for (int i = 0; i < this.size(); ++i) {
             if (this.getTask(i).isRepeated() && this.getTask(i).isActive()) {
                 if (this.getTask(i).getStartTime() >= from
@@ -121,32 +114,22 @@ public class ArrayTaskList implements Iterable<Task>{
                 }
             }
         }
-
         return subTaskList;
-
     }
-
 
     @Override
     public Iterator<Task> iterator() {
-
         Iterator<Task> iterator = new Iterator<Task>() {
-
             private int currentIndex = 0;
-
             @Override
             public boolean hasNext() {
                 return currentIndex < size() && taskList[currentIndex] != null;
             }
-
             @Override
             public Task next() {
                 return taskList[currentIndex++];
             }
-
         };
-
         return iterator;
-
     }
 }

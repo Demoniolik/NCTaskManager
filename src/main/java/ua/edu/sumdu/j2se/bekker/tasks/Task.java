@@ -9,9 +9,7 @@ package ua.edu.sumdu.j2se.bekker.tasks;
  *
  * @author Bekker Dmitry
  * */
-
 public class Task {
-
     private String title;
     private int time;
     private int start;
@@ -25,7 +23,6 @@ public class Task {
      * @param title - is the name of the task, that we want to schedule
      * @param time - specified time of the task to occur
      */
-
     public Task(String title, int time) {
         this.title = title;
         this.time = time;
@@ -39,7 +36,6 @@ public class Task {
      * @param end - the deadline of the task
      * @param interval - amount of times the task will be repeated during the time form start point to the end
      */
-
     public Task(String title, int start, int end, int interval) {
         this.title = title;
         this.start = start;
@@ -75,7 +71,6 @@ public class Task {
      * in case it was a repeatable task it becomes non-repeatable
      * and it sets time for non-repeatable task
      */
-
     public void setTime(int time) {
         if (isRepeated()) {
             this.start = 0;
@@ -111,7 +106,6 @@ public class Task {
      * in case it was a non-repeatable task it becomes repeatable
      * and it sets time for repeatable task
      */
-
     public void setTime(int start, int end, int interval) {
         if (!isRepeated()) {
             this.time = 0;
@@ -136,7 +130,6 @@ public class Task {
      * @param current - time that is given to check when the task is scheduled in case the given time is before the task time
      * @return the time of the task in case the given time is before the task time
      * */
-
     public int nextTimeAfter(int current) {
         if (isActive()) {
             if (!isRepeated()) {
