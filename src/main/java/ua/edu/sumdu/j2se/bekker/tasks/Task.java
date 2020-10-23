@@ -20,11 +20,10 @@ public class Task {
     /**
      * This is constructor which will creates non-repeated task
      *
-     * @param title - is the name of the task, that we want to schedule
-     * @param time - specified time of the task to occur
+     * @param title the name of the task, that we want to schedule
+     * @param time specified time of the task to occur
      */
     public Task(String title, int time) throws IllegalArgumentException {
-
         if (title == null) {
             throw new IllegalArgumentException("Title of the task cannot be null");
         }
@@ -38,10 +37,10 @@ public class Task {
     /**
      * This is the constructor which creates repeated task
      *
-     * @param title - is the name of the task, that we want to schedule
-     * @param start - start time of the task
-     * @param end - the deadline of the task
-     * @param interval - amount of times the task will be repeated during the time form start point to the end
+     * @param title is the name of the task, that we want to schedule
+     * @param start start time of the task
+     * @param end the deadline of the task
+     * @param interval amount of times the task will be repeated during the time form start point to the end
      */
     public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
         if (title == null) {
@@ -94,6 +93,8 @@ public class Task {
      * This method sets time for the task
      * in case it was a repeatable task it becomes non-repeatable
      * and it sets time for non-repeatable task
+     *
+     * @param time given time to be set as a non-repeatable task
      */
     public void setTime(int time) throws IllegalArgumentException {
         if (time < 0) {
@@ -132,6 +133,10 @@ public class Task {
      * This method sets time for the task
      * in case it was a non-repeatable task it becomes repeatable
      * and it sets time for repeatable task
+     *
+     * @param start point of the scheduled task
+     * @param end point of the scheduled task
+     * @param interval amount of repetitions in the range
      */
     public void setTime(int start, int end, int interval) throws IllegalArgumentException {
         if (start < 0) {
