@@ -3,7 +3,7 @@ package ua.edu.sumdu.j2se.bekker.tasks;
 /**
  * This class is responsible for storing objects of Task class
  * It represented as an Linked list so in the base it has a sequence of nodes that contain:
- *  - taskList and reference to the next node
+ *  taskList and reference to the next node
  * As well all the methods for adding, removing, getting tasks are provided
  *
  * @author Dmitry Bekker
