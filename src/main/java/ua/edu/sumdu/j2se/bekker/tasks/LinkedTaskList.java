@@ -8,7 +8,6 @@ package ua.edu.sumdu.j2se.bekker.tasks;
  *
  * @author Dmitry Bekker
  */
-
 public class LinkedTaskList {
     private int size;
     private Node head; // Main node that contains the start of the linked list
@@ -20,6 +19,7 @@ public class LinkedTaskList {
     class Node {
         Task task;
         Node next;
+
         /**
          * Custom constructor that assign task to the current node
          *
@@ -88,7 +88,6 @@ public class LinkedTaskList {
         Node prev_node = new_node;
         while (new_node != null) {
             if (new_node.task.equals(task)) {
-                //prev_node.task = null;
                 prev_node.next = new_node.next;
                 size--;
                 return true;
