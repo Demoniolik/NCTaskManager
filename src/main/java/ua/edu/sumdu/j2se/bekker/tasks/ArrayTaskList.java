@@ -10,7 +10,7 @@ import java.util.Iterator;
  * @author Dmitry Bekker
  */
 
-public class ArrayTaskList implements Iterable<Task>{
+public class ArrayTaskList extends AbstractTaskList implements Iterable<Task>{
     private Task[] taskList;
     private int capacity;
     private int size;
@@ -87,7 +87,7 @@ public class ArrayTaskList implements Iterable<Task>{
             if (taskList[i].equals(task)) {
                 moveToTheLeft(i);
                 this.size--;
-                if (this.size() <= (double)capacity * 0.4) {
+                if (this.size() <= capacity * 0.4) {
                     shrink();
                 }
                 return true;
@@ -139,33 +139,6 @@ public class ArrayTaskList implements Iterable<Task>{
             throw new IndexOutOfBoundsException("Given index is out of array bound");
         }
         return this.taskList[index];
-    }
-
-    /**
-     * This method return subclass of the ArrayTaskList
-     * that contains of the tasks that are scheduled in the range
-     * given by the user
-     *
-     * @param from is the start point of gathering of tasks
-     * @param to is the end point of gathering of tasks
-     * @return subclass of type ArrayTaskList that contains of selected elements
-     */
-    public ArrayTaskList incoming(int from, int to) {
-        ArrayTaskList subTaskList = new ArrayTaskList();
-        for (int i = 0; i < this.size(); ++i) {
-            if (this.getTask(i).isRepeated() && this.getTask(i).isActive()) {
-                if (this.getTask(i).getStartTime() >= from
-                        && this.getTask(i).getEndTime() <= to) {
-                    subTaskList.add(this.getTask(i));
-                }
-            }else {
-                if (this.getTask(i).getTime() <= from
-                        && this.getTask(i).getTime() >= to) {
-                    subTaskList.add(this.getTask(i));
-                }
-            }
-        }
-        return subTaskList;
     }
 
     /**
