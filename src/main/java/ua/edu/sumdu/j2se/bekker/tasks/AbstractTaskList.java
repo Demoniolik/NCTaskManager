@@ -26,7 +26,12 @@ abstract public class AbstractTaskList {
      * @return subclass of type ArrayTaskList that contains of selected elements
      */
     public AbstractTaskList incoming(int from, int to) {
-        AbstractTaskList subTaskList = new ArrayTaskList(); // Confusing moment how do we choose the right realization?
+        AbstractTaskList subTaskList;
+        if (this.getClass().getSimpleName().equals("ArrayTaskList")) {
+            subTaskList = new ArrayTaskList();
+        }else {
+            subTaskList = new LinkedTaskList();
+        }
         for (int i = 0; i < this.size(); ++i) {
             if (getTask(i).nextTimeAfter(from) != -1 && getTask(i).nextTimeAfter(to) == -1) {
                 subTaskList.add(getTask(i));
