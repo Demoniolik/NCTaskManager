@@ -8,7 +8,7 @@ package ua.edu.sumdu.j2se.bekker.tasks;
  *
  * @author Dmitry Bekker
  */
-public class LinkedTaskList {
+public class LinkedTaskList extends AbstractTaskList {
     private int size;
     private Node head; // Main node that contains the start of the linked list
 
@@ -17,8 +17,8 @@ public class LinkedTaskList {
      * the object of class Task and the reference to the next node in sequence
      */
     class Node {
-        Task task;
-        Node next;
+        private Task task;
+        private Node next;
 
         /**
          * Custom constructor that assign task to the current node
@@ -114,32 +114,5 @@ public class LinkedTaskList {
             temp = temp.next;
         }
         return null;
-    }
-
-    /**
-     * This method return subclass of the LinkedTaskList
-     * that contains of the tasks that are scheduled in the range
-     * given by the user
-     *
-     * @param from is the start point of gathering of tasks
-     * @param to is the end point of gathering of tasks
-     * @return subclass of type ArrayTaskList that contains of selected elements
-     */
-    public LinkedTaskList incoming(int from, int to) {
-        LinkedTaskList subTaskList = new LinkedTaskList();
-        for (int i = 0; i < this.size(); ++i) {
-            if (this.getTask(i).isRepeated() && this.getTask(i).isActive()) {
-                if (this.getTask(i).getStartTime() >= from
-                        && this.getTask(i).getEndTime() <= to) {
-                    subTaskList.add(this.getTask(i));
-                }
-            }else {
-                if (this.getTask(i).getTime() <= from
-                        && this.getTask(i).getTime() >= to) {
-                    subTaskList.add(this.getTask(i));
-                }
-            }
-        }
-        return subTaskList;
     }
 }
