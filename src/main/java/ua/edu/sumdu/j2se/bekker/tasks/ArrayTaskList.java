@@ -1,6 +1,8 @@
 package ua.edu.sumdu.j2se.bekker.tasks;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * This class is responsible for storing objects of Task class
@@ -88,7 +90,7 @@ public class ArrayTaskList extends AbstractTaskList implements Iterable<Task>{
                 moveToTheLeft(i);
                 this.size--;
                 if (this.size() <= capacity * 0.4) {
-                    shrink();
+                    //shrink();
                 }
                 return true;
             }
@@ -150,6 +152,7 @@ public class ArrayTaskList extends AbstractTaskList implements Iterable<Task>{
     @Override
     public Iterator<Task> iterator() {
         Iterator<Task> iterator = new Iterator<Task>() {
+            private int lastRet = -1; // index of last element returned; -1 if no such
             private int currentIndex = 0;
             @Override
             public boolean hasNext() {
@@ -157,9 +160,44 @@ public class ArrayTaskList extends AbstractTaskList implements Iterable<Task>{
             }
             @Override
             public Task next() {
+                lastRet = currentIndex;
                 return taskList[currentIndex++];
+            }
+            @Override
+            public void remove() {
+                if (currentIndex > 0) {
+                    ArrayTaskList.this.remove(taskList[lastRet]);
+                    currentIndex--;
+                }else {
+                    throw new IllegalStateException();
+                }
             }
         };
         return iterator;
+    }
+
+    public ArrayTaskList clone() {
+        ArrayTaskList clone = new ArrayTaskList();
+        clone.taskList = copy();
+        clone.capacity = this.capacity;
+        clone.size = this.size;
+        return clone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArrayTaskList tasks = (ArrayTaskList) o;
+        return capacity == tasks.capacity &&
+                size == tasks.size &&
+                Arrays.equals(taskList, tasks.taskList);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(capacity, size);
+        result = 31 * result + Arrays.hashCode(taskList);
+        return result;
     }
 }
