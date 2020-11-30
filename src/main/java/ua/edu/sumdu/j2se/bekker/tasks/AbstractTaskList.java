@@ -1,5 +1,8 @@
 package ua.edu.sumdu.j2se.bekker.tasks;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 /**
  * This class unites all the needed functionality
  * that are needed to store data of List types
@@ -32,11 +35,21 @@ abstract public class AbstractTaskList {
         }else {
             subTaskList = new LinkedTaskList();
         }
-        for (int i = 0; i < this.size(); ++i) {
-            if (getTask(i).nextTimeAfter(from) != -1 && getTask(i).nextTimeAfter(to) == -1) {
-                subTaskList.add(getTask(i));
-            }
-        }
+        getStream().filter(task -> task.nextTimeAfter(from) != -1
+                && task.nextTimeAfter(to) == -1).forEach(subTaskList::add);
         return subTaskList;
+    }
+
+    /**
+     *  This method writes all the elements to the stream
+     * @return stream that contains all the elements of taskList
+     */
+    public Stream<Task> getStream() {
+        Task[] tasks = new Task[this.size()];
+
+        for(int i = 0; i < size(); ++i) {
+            tasks[i] = getTask(i);
+        }
+        return Arrays.stream(tasks);
     }
 }
