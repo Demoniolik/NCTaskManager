@@ -1,5 +1,7 @@
 package ua.edu.sumdu.j2se.bekker.tasks;
 
+import java.util.Objects;
+
 /**
  * This is the class which hold all the information needed to handle the task in the program
  * This class coluld be described as one that hold all the needed information to schedule a task
@@ -187,5 +189,47 @@ public class Task {
             }
         }
         return -1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return time == task.time &&
+                start == task.start &&
+                end == task.end &&
+                interval == task.interval &&
+                active == task.active &&
+                title.equals(task.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, time, start, end, interval, active);
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "title='" + title + '\'' +
+                ", time=" + time +
+                ", start=" + start +
+                ", end=" + end +
+                ", interval=" + interval +
+                ", active=" + active +
+                '}';
+    }
+
+    public Task clone() {
+        Task new_task = new Task("", 0);
+        new_task.title = new String(this.title);
+        new_task.time = this.time;
+        new_task.active = this.active;
+        new_task.start = this.start;
+        new_task.end = this.end;
+        new_task.interval = this.interval;
+        return new_task;
     }
 }

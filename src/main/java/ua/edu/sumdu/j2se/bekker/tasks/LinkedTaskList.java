@@ -1,5 +1,8 @@
 package ua.edu.sumdu.j2se.bekker.tasks;
 
+import java.util.Iterator;
+import java.util.Objects;
+
 /**
  * This class is responsible for storing objects of Task class
  * It represented as an Linked list so in the base it has a sequence of nodes that contain:
@@ -8,7 +11,7 @@ package ua.edu.sumdu.j2se.bekker.tasks;
  *
  * @author Dmitry Bekker
  */
-public class LinkedTaskList extends AbstractTaskList {
+public class LinkedTaskList extends AbstractTaskList implements Iterable<Task> {
     private int size;
     private Node head; // Main node that contains the start of the linked list
 
@@ -27,6 +30,20 @@ public class LinkedTaskList extends AbstractTaskList {
          */
         public Node(Task task) {
             this.task = task;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Node node = (Node) o;
+            return Objects.equals(task, node.task) &&
+                    Objects.equals(next, node.next);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(task, next);
         }
     }
 
@@ -114,5 +131,67 @@ public class LinkedTaskList extends AbstractTaskList {
             temp = temp.next;
         }
         return null;
+    }
+
+    @Override
+    public Iterator<Task> iterator() {
+        Iterator<Task> iterator = new Iterator<Task>() {
+            private int currentIndex = 0;
+            private int lastRet = -1;
+
+            @Override
+            public boolean hasNext() {
+                return currentIndex < size() && getTask(currentIndex) != null;
+            }
+
+            @Override
+            public Task next() {
+                lastRet = currentIndex;
+                return getTask(currentIndex++);
+            }
+
+            @Override
+            public void remove() {
+                if (currentIndex > 0) {
+                    LinkedTaskList.this.remove(getTask(lastRet));
+                    currentIndex--;
+                }else {
+                    throw new IllegalStateException();
+                }
+            }
+        };
+        return iterator;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LinkedTaskList that = (LinkedTaskList) o;
+        Node runner = head;
+        Node givenObject = that.head;
+        while (runner != null) {
+            if (!givenObject.equals(runner)) {
+                return false;
+            }
+            runner = runner.next;
+            givenObject = givenObject.next;
+        }
+        return size == that.size;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(size, head);
+    }
+
+    public LinkedTaskList clone() {
+        LinkedTaskList clone = new LinkedTaskList();
+        Node runner = head;
+        while (runner != null) {
+            clone.add(runner.task);
+            runner = runner.next;
+        }
+        return clone;
     }
 }
