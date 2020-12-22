@@ -1,5 +1,6 @@
 package ua.edu.sumdu.j2se.bekker.tasks;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -28,15 +29,16 @@ abstract public class AbstractTaskList {
      * @param to is the end point of gathering of tasks
      * @return subclass of type ArrayTaskList that contains of selected elements
      */
-    public AbstractTaskList incoming(int from, int to) {
+    public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to) {
         AbstractTaskList subTaskList;
         if (this.getClass().getSimpleName().equals("ArrayTaskList")) {
             subTaskList = new ArrayTaskList();
         }else {
             subTaskList = new LinkedTaskList();
         }
-        getStream().filter(task -> task.nextTimeAfter(from) != -1
-                && task.nextTimeAfter(to) == -1).forEach(subTaskList::add);
+        getStream().filter(task -> task.nextTimeAfter(from).isAfter(from)
+                && task.nextTimeAfter(to).isBefore(to))
+                .forEach(subTaskList::add);
         return subTaskList;
     }
 
