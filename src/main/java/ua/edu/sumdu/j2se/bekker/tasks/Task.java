@@ -1,5 +1,6 @@
 package ua.edu.sumdu.j2se.bekker.tasks;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -13,9 +14,9 @@ import java.util.Objects;
  * */
 public class Task {
     private String title;
-    private int time;
-    private int start;
-    private int end;
+    private LocalDateTime time;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private int interval;
     private boolean active;
 
@@ -25,14 +26,11 @@ public class Task {
      * @param title the name of the task, that we want to schedule
      * @param time specified time of the task to occur
      */
-    public Task(String title, int time) throws IllegalArgumentException {
+    public Task(String title, LocalDateTime time) throws IllegalArgumentException {
         if (title == null) {
             throw new IllegalArgumentException("Title of the task cannot be null");
         }
         this.title = title;
-        if(time < 0) {
-            throw new IllegalArgumentException("Time cannot be less than zero");
-        }
         this.time = time;
     }
 
@@ -44,24 +42,16 @@ public class Task {
      * @param end the deadline of the task
      * @param interval amount of times the task will be repeated during the time form start point to the end
      */
-    public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
+    public Task(String title, LocalDateTime start, LocalDateTime end, int interval) throws IllegalArgumentException, NullPointerException {
         if (title == null) {
             throw new IllegalArgumentException("Title of the task cannot be null");
         }
+        if (start == null || end == null) {
+            throw new NullPointerException();
+        }
         this.title = title;
-        if (start < 0) {
-            throw new IllegalArgumentException("Start point cannot be less than zero");
-        }
         this.start = start;
-        if (end < 0) {
-            throw new IllegalArgumentException("End point cannot be less than zero");
-        }else if (start >= end) {
-            throw new IllegalArgumentException("End point cannot be less or equal to start point");
-        }
         this.end = end;
-        if (interval < 0) {
-            throw new IllegalArgumentException("Interval cannot be less than zero");
-        }
         this.interval = interval;
     }
 
@@ -84,7 +74,7 @@ public class Task {
         this.active = active;
     }
 
-    public int getTime() {
+    public LocalDateTime getTime() {
         if (isRepeated()) {
             return this.start;
         }
@@ -98,26 +88,26 @@ public class Task {
      *
      * @param time given time to be set as a non-repeatable task
      */
-    public void setTime(int time) throws IllegalArgumentException {
-        if (time < 0) {
-            throw new IllegalArgumentException("Time cannot be less than zero");
+    public void setTime(LocalDateTime time) throws IllegalArgumentException {
+        if (time == null) {
+            throw new NullPointerException();
         }
         if (isRepeated()) {
-            this.start = 0;
-            this.end = 0;
+            this.start = time;
+            this.end = time;
             this.interval = 0;
         }
         this.time = time;
     }
 
-    public int getStartTime() {
+    public LocalDateTime getStartTime() {
         if (isRepeated()) {
             return this.start;
         }
         return this.time;
     }
 
-    public int getEndTime() {
+    public LocalDateTime getEndTime() {
         if (isRepeated()) {
             return this.end;
         }
@@ -140,20 +130,20 @@ public class Task {
      * @param end point of the scheduled task
      * @param interval amount of repetitions in the range
      */
-    public void setTime(int start, int end, int interval) throws IllegalArgumentException {
-        if (start < 0) {
-            throw new IllegalArgumentException("Start point cannot be less than zero");
+    public void setTime(LocalDateTime start, LocalDateTime end, int interval) throws IllegalArgumentException, NullPointerException {
+        if (start == null) {
+            throw new NullPointerException();
         }
-        if (end < 0) {
-            throw new IllegalArgumentException("End point cannot be less than zero");
-        }else if (start >= end) {
-            throw new IllegalArgumentException("End point cannot be less or equal to start point");
+        if (end == null) {
+            throw new NumberFormatException();
+        }else if (start.isAfter(end)) {
+            throw new NullPointerException();
         }
         if (interval < 0) {
             throw new IllegalArgumentException("Interval cannot be less than zero");
         }
         if (!isRepeated()) {
-            this.time = 0;
+            this.time = start;
         }
         this.start = start;
         this.end = end;
@@ -161,7 +151,7 @@ public class Task {
     }
 
     public boolean isRepeated() {
-        return time == 0;
+        return interval > 0;
     }
 
     /**
@@ -175,20 +165,31 @@ public class Task {
      * @param current - time that is given to check when the task is scheduled in case the given time is before the task time
      * @return the time of the task in case the given time is before the task time
      * */
-    public int nextTimeAfter(int current) {
-        if (isActive()) {
-            if (!isRepeated()) {
-                if (this.time > current) {
-                    return this.time;
-                }else return -1;
+    public LocalDateTime nextTimeAfter(LocalDateTime current) {
+        if (active && !isRepeated()) {
+            if (current.isBefore(time)) {
+                return time;
             }
-            for (int startPoint = this.start; startPoint < this.end; startPoint += interval) {
-                if (current < startPoint) {
-                    return startPoint;
+            return null;
+        }
+
+        if (active) {
+            isRepeated();
+            LocalDateTime nextTime = start;
+            if (current.isBefore(start)) {
+                return start;
+            } else if (current.isAfter(end)) {
+                return null;
+            } else {
+                while (nextTime.isBefore(end) || nextTime.isEqual(end)) {
+                    if (nextTime.isAfter(current)) {
+                        return nextTime;
+                    }
+                    nextTime = nextTime.plusSeconds(interval);
                 }
             }
         }
-        return -1;
+        return null;
     }
 
     @Override
@@ -223,7 +224,7 @@ public class Task {
     }
 
     public Task clone() {
-        Task new_task = new Task("", 0);
+        Task new_task = new Task("", null);
         new_task.title = new String(this.title);
         new_task.time = this.time;
         new_task.active = this.active;

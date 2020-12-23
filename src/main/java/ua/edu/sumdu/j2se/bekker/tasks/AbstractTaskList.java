@@ -1,5 +1,9 @@
 package ua.edu.sumdu.j2se.bekker.tasks;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 /**
  * This class unites all the needed functionality
  * that are needed to store data of List types
@@ -25,18 +29,29 @@ abstract public class AbstractTaskList {
      * @param to is the end point of gathering of tasks
      * @return subclass of type ArrayTaskList that contains of selected elements
      */
-    public AbstractTaskList incoming(int from, int to) {
+    public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to) {
         AbstractTaskList subTaskList;
         if (this.getClass().getSimpleName().equals("ArrayTaskList")) {
             subTaskList = new ArrayTaskList();
         }else {
             subTaskList = new LinkedTaskList();
         }
-        for (int i = 0; i < this.size(); ++i) {
-            if (getTask(i).nextTimeAfter(from) != -1 && getTask(i).nextTimeAfter(to) == -1) {
-                subTaskList.add(getTask(i));
-            }
-        }
+        getStream().filter(task -> task.nextTimeAfter(from).isAfter(from)
+                && task.nextTimeAfter(to).isBefore(to))
+                .forEach(subTaskList::add);
         return subTaskList;
+    }
+
+    /**
+     *  This method writes all the elements to the stream
+     * @return stream that contains all the elements of taskList
+     */
+    public Stream<Task> getStream() {
+        Task[] tasks = new Task[this.size()];
+
+        for(int i = 0; i < size(); ++i) {
+            tasks[i] = getTask(i);
+        }
+        return Arrays.stream(tasks);
     }
 }
