@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.bekker.tasks;
+package ua.edu.sumdu.j2se.bekker.tasks.model;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  *
  * @author Dmitry Bekker
  */
-abstract public class AbstractTaskList {
+abstract public class AbstractTaskList implements Iterable<Task> {
 
     abstract public void add(Task task);
     abstract public Task getTask(int index);

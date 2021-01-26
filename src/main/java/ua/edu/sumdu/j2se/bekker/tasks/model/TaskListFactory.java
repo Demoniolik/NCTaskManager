@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.bekker.tasks;
+package ua.edu.sumdu.j2se.bekker.tasks.model;
 
 public class TaskListFactory {
 

@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.bekker.tasks;
+package ua.edu.sumdu.j2se.bekker.tasks.model;
 
 /**
  * This class holds only one field its enum that has two constant values

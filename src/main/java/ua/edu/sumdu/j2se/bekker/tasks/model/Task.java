@@ -1,5 +1,6 @@
-package ua.edu.sumdu.j2se.bekker.tasks;
+package ua.edu.sumdu.j2se.bekker.tasks.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ import java.util.Objects;
  *
  * @author Bekker Dmitry
  * */
-public class Task {
+public class Task implements Serializable {
     private String title;
     private LocalDateTime time;
     private LocalDateTime start;

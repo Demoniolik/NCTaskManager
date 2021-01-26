@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.bekker.tasks;
+package ua.edu.sumdu.j2se.bekker.tasks.model;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -151,7 +151,7 @@ public class ArrayTaskList extends AbstractTaskList implements Iterable<Task>{
      */
     @Override
     public Iterator<Task> iterator() {
-        Iterator<Task> iterator = new Iterator<Task>() {
+        return new Iterator<Task>() {
             private int lastRet = -1; // index of last element returned; -1 if no such
             private int currentIndex = 0;
             @Override
@@ -173,7 +173,6 @@ public class ArrayTaskList extends AbstractTaskList implements Iterable<Task>{
                 }
             }
         };
-        return iterator;
     }
 
     public ArrayTaskList clone() {
