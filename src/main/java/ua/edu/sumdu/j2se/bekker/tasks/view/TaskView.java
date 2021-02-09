@@ -48,7 +48,7 @@ public interface TaskView {
      *
      * @return an integer value into a controller.
      */
-    int getIsTaskRepeated();
+    TaskStatus getIsTaskRepeated();
 
     /**
      * Used to get time interval in minutes from representation.

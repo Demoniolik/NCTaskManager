@@ -53,7 +53,7 @@ public class MainViewDecorator {
          return taskView.getActiveStatus();
     }
 
-    public int getIsTaskRepeated(){
+    public TaskStatus getTaskStatus(){
         return taskView.getIsTaskRepeated();
     }
 

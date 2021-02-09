@@ -3,10 +3,7 @@ package ua.edu.sumdu.j2se.bekker.tasks.view.impl;
 import org.apache.log4j.Logger;
 import ua.edu.sumdu.j2se.bekker.tasks.model.AbstractTaskList;
 import ua.edu.sumdu.j2se.bekker.tasks.model.Task;
-import ua.edu.sumdu.j2se.bekker.tasks.view.ConsolePrinting;
-import ua.edu.sumdu.j2se.bekker.tasks.view.ConsoleTable;
-import ua.edu.sumdu.j2se.bekker.tasks.view.TimeConverter;
-import ua.edu.sumdu.j2se.bekker.tasks.view.TaskView;
+import ua.edu.sumdu.j2se.bekker.tasks.view.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -122,22 +119,22 @@ public class TaskViewImpl implements TaskView {
      * @return an integer value into a controller.
      */
     @Override
-    public int getIsTaskRepeated() {
+    public TaskStatus getIsTaskRepeated() {
         int choice;
         do {
             ConsolePrinting.print("Enter [1] to create non-repeating task or [2] to repeating task: ");
             choice = readMenuOption(2);
             if (choice == 1) {
                 ConsolePrinting.print("You selected non-repeating task!");
-                return choice;
+                return TaskStatus.NON_REPEATED;
             } else if (choice == 2) {
                 ConsolePrinting.print("You selected repeating task!!");
-                return choice;
+                return TaskStatus.REPEATED;
             } else if (choice == -1) {
                 break;
             }
         } while (true);
-        return choice;
+        return null;
     }
 
     /**
