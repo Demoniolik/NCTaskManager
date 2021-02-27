@@ -1,5 +1,7 @@
 package ua.edu.sumdu.j2se.bekker.tasks.model;
 
+import org.apache.log4j.Logger;
+
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -12,8 +14,13 @@ import java.util.Objects;
  * @author Dmitry Bekker
  */
 public class LinkedTaskList extends AbstractTaskList implements Iterable<Task> {
+    private static final Logger logger = Logger.getLogger(LinkedTaskList.class);
     private int size;
     private Node head; // Main node that contains the start of the linked list
+
+    public LinkedTaskList() {
+        logger.info("Lined task list is created");
+    }
 
     /**
      * This class is representation of the Node that contains

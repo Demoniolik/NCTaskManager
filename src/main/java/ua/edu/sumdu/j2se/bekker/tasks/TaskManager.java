@@ -6,7 +6,10 @@ import ua.edu.sumdu.j2se.bekker.tasks.model.AbstractTaskList;
 import ua.edu.sumdu.j2se.bekker.tasks.model.ListTypes;
 import ua.edu.sumdu.j2se.bekker.tasks.model.TaskIO;
 import ua.edu.sumdu.j2se.bekker.tasks.model.TaskListFactory;
+import ua.edu.sumdu.j2se.bekker.tasks.view.ConsolePrinting;
 import ua.edu.sumdu.j2se.bekker.tasks.view.MainViewDecorator;
+
+import java.io.IOException;
 
 public class TaskManager {
     public final static String DATA_JSON_PATH = "data.json";
@@ -20,7 +23,7 @@ public class TaskManager {
         try {
             this.list = TaskListFactory.createTaskList(ListTypes.types.ARRAY);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
@@ -30,11 +33,19 @@ public class TaskManager {
      * task list to the data.txt file.
      */
     public void launch() {
-        TaskIO.loadFromFileStorage(list, DATA_JSON_PATH);
+        try {
+            TaskIO.loadFromFileStorage(list, DATA_JSON_PATH);
+        } catch (IOException exception) {
+            ConsolePrinting.println("Error. Failed to load data from a file storage");
+        }
         MainViewDecorator view = new MainViewDecorator(); // Here you need to remove scanner as parameter
         MainControllerDecorator controller = new MainControllerDecorator(list, view);
         controller.execute();
-        TaskIO.saveToFileStorage(list, DATA_JSON_PATH);
+        try {
+            TaskIO.saveToFileStorage(list, DATA_JSON_PATH);
+        } catch (IOException exception) {
+            ConsolePrinting.println("Error. Failed to save data to file");
+        }
         logger.info("The program is finished by user.");
     }
 }

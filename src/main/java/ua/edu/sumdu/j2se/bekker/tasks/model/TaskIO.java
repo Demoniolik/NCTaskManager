@@ -21,7 +21,7 @@ public class TaskIO {
      * @param tasks list of tasks.
      * @param out   output task stream.
      */
-    public static void write(AbstractTaskList tasks, OutputStream out) {
+    public static void write(AbstractTaskList tasks, OutputStream out) throws IOException {
         try (DataOutputStream stream = new DataOutputStream(new BufferedOutputStream(out))) {
             stream.writeInt(tasks.size());
             for (Task task : tasks) {
@@ -43,7 +43,8 @@ public class TaskIO {
                 }
             }
         } catch (IOException e) {
-            //TODO: Here you need to log an error
+            logger.error(e);
+            throw e;
         }
     }
 
@@ -53,14 +54,13 @@ public class TaskIO {
      * @param tasks list of tasks.
      * @param in    input task stream.
      */
-    public static void read(AbstractTaskList tasks, InputStream in) {
+    public static void read(AbstractTaskList tasks, InputStream in) throws IOException {
         Task task;
         LocalDateTime startT;
         LocalDateTime endT;
         try (DataInputStream stream = new DataInputStream(new BufferedInputStream(in))) {
             int size = stream.readInt();
             for (int i = 0; i < size; i++) {
-                int length = stream.readInt();
                 String title = stream.readUTF();
                 int isActive = stream.readInt();
                 int interval = stream.readInt();
@@ -76,7 +76,8 @@ public class TaskIO {
                 task.setActive(active);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
+            throw e;
         }
     }
 
@@ -86,19 +87,21 @@ public class TaskIO {
      * @param tasks list of tasks.
      * @param file  target file.
      */
-    public static void writeBinary(AbstractTaskList tasks, File file) {
+    public static void writeBinary(AbstractTaskList tasks, File file) throws IOException {
         try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file))) {
             write(tasks, stream);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
+            throw e;
         }
     }
 
-    public static void readBinary(AbstractTaskList tasks, File file) {
+    public static void readBinary(AbstractTaskList tasks, File file) throws IOException {
         try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file))) {
             read(tasks, stream);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
+            throw e;
         }
     }
 
@@ -108,14 +111,15 @@ public class TaskIO {
      * @param tasks list of tasks.
      * @param out   output stream.
      */
-    public static void write(AbstractTaskList tasks, Writer out) {
+    public static void write(AbstractTaskList tasks, Writer out) throws IOException {
         //String json = new Gson().newBuilder().setPrettyPrinting().create().toJson(tasks);
         String json = new Gson().toJson(tasks); // Here we write an entire list with all null data because we use capacity
         try (BufferedWriter writer = new BufferedWriter(out)) {
             writer.write(json);
             writer.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
+            throw e;
         }
     }
 
@@ -125,7 +129,7 @@ public class TaskIO {
      * @param tasks list of tasks.
      * @param in    input stream.
      */
-    public static void read(AbstractTaskList tasks, Reader in) {
+    public static void read(AbstractTaskList tasks, Reader in) throws IOException {
         try (BufferedReader reader = new BufferedReader(in)) {
             String text;
             while ((text = reader.readLine()) != null) {
@@ -135,7 +139,8 @@ public class TaskIO {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
+            throw e;
         }
     }
 
@@ -145,13 +150,14 @@ public class TaskIO {
      * @param tasks list of tasks.
      * @param file  target file.
      */
-    public static void writeText(AbstractTaskList tasks, File file) {
+    public static void writeText(AbstractTaskList tasks, File file) throws IOException {
         String json = new Gson().toJson(tasks); // Here we write an entire list with all null data because we use capacity
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(json);
             writer.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
+            throw e;
         }
     }
 
@@ -161,7 +167,7 @@ public class TaskIO {
      * @param tasks list of tasks.
      * @param file  source JSON file.
      */
-    public static void readText(AbstractTaskList tasks, File file) {
+    public static void readText(AbstractTaskList tasks, File file) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String text;
             while ((text = reader.readLine()) != null) {
@@ -171,7 +177,8 @@ public class TaskIO {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
+            throw e;
         }
     }
 
@@ -181,7 +188,7 @@ public class TaskIO {
      * @param list task list
      * @param path file path
      */
-    public static void loadFromFileStorage(AbstractTaskList list, String path) {
+    public static void loadFromFileStorage(AbstractTaskList list, String path) throws IOException {
         Path currentPath = FileSystems.getDefault().getPath(path).toAbsolutePath();
         if (currentPath.toFile().exists()) {
             TaskIO.readText(list, new File(String.valueOf(currentPath.toFile())));
@@ -197,7 +204,7 @@ public class TaskIO {
      * @param list task list
      * @param path file path
      */
-    public static void saveToFileStorage(AbstractTaskList list, String path) {
+    public static void saveToFileStorage(AbstractTaskList list, String path) throws IOException {
         Path currentPath = FileSystems.getDefault().getPath(path).toAbsolutePath();
         try {
             Files.deleteIfExists(currentPath);

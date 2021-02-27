@@ -1,5 +1,7 @@
 package ua.edu.sumdu.j2se.bekker.tasks.model;
 
+import org.apache.log4j.Logger;
+
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -14,7 +16,7 @@ import java.util.stream.Stream;
  * @author Dmitry Bekker
  */
 abstract public class AbstractTaskList implements Iterable<Task> {
-
+    private static final Logger logger = Logger.getLogger(AbstractTaskList.class);
     abstract public void add(Task task);
     abstract public Task getTask(int index);
     abstract public int size();
@@ -30,6 +32,7 @@ abstract public class AbstractTaskList implements Iterable<Task> {
      * @return subclass of type ArrayTaskList that contains of selected elements
      */
     public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to) {
+        logger.info("Creating abstract task list");
         AbstractTaskList subTaskList;
         if (this.getClass().getSimpleName().equals("ArrayTaskList")) {
             subTaskList = new ArrayTaskList();
@@ -47,6 +50,7 @@ abstract public class AbstractTaskList implements Iterable<Task> {
      * @return stream that contains all the elements of taskList
      */
     public Stream<Task> getStream() {
+        logger.info("Getting stream of task from task lits");
         Task[] tasks = new Task[this.size()];
 
         for(int i = 0; i < size(); ++i) {

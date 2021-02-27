@@ -1,5 +1,7 @@
 package ua.edu.sumdu.j2se.bekker.tasks.model;
 
+import org.apache.log4j.Logger;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
@@ -13,6 +15,7 @@ import java.util.Objects;
  */
 
 public class ArrayTaskList extends AbstractTaskList implements Iterable<Task>{
+    private static final Logger logger = Logger.getLogger(ArrayTaskList.class);
     private Task[] taskList;
     private int capacity;
     private int size;
@@ -21,6 +24,7 @@ public class ArrayTaskList extends AbstractTaskList implements Iterable<Task>{
      * Default constructor that allocates the array with default value
      */
     public ArrayTaskList() {
+        logger.info("Array task list is created");
         final int DEFAULT_CAPACITY = 16;
         this.capacity = DEFAULT_CAPACITY;
         this.taskList = new Task[this.capacity];
@@ -32,6 +36,7 @@ public class ArrayTaskList extends AbstractTaskList implements Iterable<Task>{
      * @param capacity amount of elements in the array to be it's capacity
      */
     public ArrayTaskList(int capacity) {
+        logger.info("Array task list is created");
         if (capacity > 0) {
             this.taskList = new Task[capacity];
         }

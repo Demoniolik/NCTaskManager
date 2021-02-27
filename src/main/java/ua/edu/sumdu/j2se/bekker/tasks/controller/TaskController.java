@@ -9,6 +9,7 @@ import ua.edu.sumdu.j2se.bekker.tasks.view.ConsolePrinting;
 import ua.edu.sumdu.j2se.bekker.tasks.view.MainViewDecorator;
 import ua.edu.sumdu.j2se.bekker.tasks.view.TaskStatus;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -37,7 +38,11 @@ public class TaskController {
         } else {
             creatingNonRepetitiveTask(title);
         }
-        TaskIO.saveToFileStorage(model, TaskManager.DATA_JSON_PATH);
+        try {
+            TaskIO.saveToFileStorage(model, TaskManager.DATA_JSON_PATH);
+        } catch (IOException exception) {
+            ConsolePrinting.println("Error. Failed to save data to file");
+        }
     }
 
     private void creatingNonRepetitiveTask(String title) {
@@ -49,7 +54,7 @@ public class TaskController {
             time = view.parseDateTime();
             if (time.isBefore(LocalDateTime.now())) {
                 ConsolePrinting.println("Task with given time cannot be created." +
-                        "\nTime is before now is invalid");
+                        "\nTime before now is invalid");
                 incorrectTime = true;
             }
         }while(incorrectTime);
@@ -69,7 +74,9 @@ public class TaskController {
         ConsolePrinting.print("\nEnd date of the period: ");
         LocalDateTime end = view.parseDateTime();
         int interval = view.getInterval();
-        if (!((start.isAfter(end) || start.isEqual(end)) &&
+        if (start.isBefore(LocalDateTime.now())) {
+            ConsolePrinting.println("Start date cannot be earlier than now");
+        } else if (!((start.isAfter(end) || start.isEqual(end)) &&
                 start.plusSeconds(interval).isAfter(end))) {
             task = new Task(title, start, end, interval);
             task.setActive(true);
@@ -112,7 +119,11 @@ public class TaskController {
                         break;
                     default:
                 }
-                TaskIO.saveToFileStorage(model, TaskManager.DATA_JSON_PATH);
+                try {
+                    TaskIO.saveToFileStorage(model, TaskManager.DATA_JSON_PATH);
+                } catch (IOException exception) {
+                    ConsolePrinting.println("Error. Failed to update data in file");
+                }
             }
         }
         String taskEditSuccessMessage = "The task has been successfully changed!";
@@ -194,7 +205,11 @@ public class TaskController {
         } else if (taskID > 0) {
             task = model.getTask(taskID - 1);
             model.remove(task);
-            TaskIO.saveToFileStorage(model, TaskManager.DATA_JSON_PATH);
+            try {
+                TaskIO.saveToFileStorage(model, TaskManager.DATA_JSON_PATH);
+            } catch (IOException exception) {
+                ConsolePrinting.println("Error. Failed to delete data from storage file");
+            }
             ConsolePrinting.print("Task №: " + taskID + " was deleted from controller!");
             logger.info("Task was deleted from controller!");
         }
